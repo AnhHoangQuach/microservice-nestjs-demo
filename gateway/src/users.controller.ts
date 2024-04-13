@@ -12,7 +12,12 @@ import {
 } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiTags, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOkResponse,
+  ApiCreatedResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 import { Authorization } from './decorators/authorization.decorator';
 import { IAuthorizedRequest } from './interfaces/common/authorized-request.interface';
@@ -41,6 +46,7 @@ export class UsersController {
   ) {}
 
   @Get()
+  @ApiBearerAuth('JWT')
   @Authorization(true)
   @ApiOkResponse({
     type: GetUserByTokenResponseDto,
@@ -140,6 +146,7 @@ export class UsersController {
   }
 
   @Put('/logout')
+  @ApiBearerAuth('JWT')
   @Authorization(true)
   @ApiCreatedResponse({
     type: LogoutUserResponseDto,
@@ -175,6 +182,7 @@ export class UsersController {
   }
 
   @Get('/confirm/:link')
+  @ApiBearerAuth('JWT')
   @ApiCreatedResponse({
     type: ConfirmUserResponseDto,
   })

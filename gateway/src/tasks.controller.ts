@@ -13,7 +13,12 @@ import {
 } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiTags, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOkResponse,
+  ApiCreatedResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 import { Authorization } from './decorators/authorization.decorator';
 import { Permission } from './decorators/permission.decorator';
@@ -39,6 +44,7 @@ export class TasksController {
   ) {}
 
   @Get()
+  @ApiBearerAuth('JWT')
   @Authorization(true)
   @Permission('task_search_by_user_id')
   @ApiOkResponse({
@@ -65,6 +71,7 @@ export class TasksController {
   }
 
   @Post()
+  @ApiBearerAuth('JWT')
   @Authorization(true)
   @Permission('task_create')
   @ApiCreatedResponse({
@@ -103,6 +110,7 @@ export class TasksController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('JWT')
   @Authorization(true)
   @Permission('task_delete_by_id')
   @ApiOkResponse({
@@ -140,6 +148,7 @@ export class TasksController {
   }
 
   @Put(':id')
+  @ApiBearerAuth('JWT')
   @Authorization(true)
   @Permission('task_update_by_id')
   @ApiOkResponse({

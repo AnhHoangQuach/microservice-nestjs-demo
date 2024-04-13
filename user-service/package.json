@@ -27,7 +27,7 @@
     "@nestjs/mongoose": "^10.0.6",
     "@nestjs/platform-express": "^10.0.0",
     "bcrypt": "^5.1.1",
-    "config": "link:@nestjs\\config",
+    "mongoose": "^8.3.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },

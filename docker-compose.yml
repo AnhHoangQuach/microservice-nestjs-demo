@@ -1,76 +1,109 @@
 version: '3'
+
 services:
+  gateway:
+    build: ./gateway
+    restart: always
+    hostname: gateway
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    networks:
+      - backend
+
   task-service:
     build: ./task-service
     restart: always
     hostname: task-service
     env_file:
-      - .env.development
+      - .env
+    ports:
+      - "${TASK_SERVICE_PORT}:${TASK_SERVICE_PORT}"
     networks:
       - backend
-    links:
-      - db
-    ports:
-      - ${TASK_SERVICE_PORT}:${TASK_SERVICE_PORT}
+    depends_on:
+      - task-db
+
   token-service:
     build: ./token-service
     restart: always
     hostname: token-service
     env_file:
-      - .env.development
+      - .env
+    ports:
+      - "${TOKEN_SERVICE_PORT}:${TOKEN_SERVICE_PORT}"
     networks:
       - backend
-    links:
-      - db
-    ports:
-      - ${TOKEN_SERVICE_PORT}:${TOKEN_SERVICE_PORT}
+    depends_on:
+      - token-db
+
   mailer:
     build: ./mailer
     restart: always
     hostname: mailer
     env_file:
-      - .env.development
+      - .env
+    ports:
+      - "${MAILER_SERVICE_PORT}:${MAILER_SERVICE_PORT}"
     networks:
       - backend
-    ports:
-      - ${MAILER_SERVICE_PORT}:${MAILER_SERVICE_PORT}
+
   permission-service:
     build: ./permission-service
     restart: always
     hostname: permission-service
     env_file:
-      - .env.development
+      - .env
+    ports:
+      - "${PERMISSION_SERVICE_PORT}:${PERMISSION_SERVICE_PORT}"
     networks:
       - backend
-    ports:
-      - ${PERMISSION_SERVICE_PORT}:${PERMISSION_SERVICE_PORT}
+
   user-service:
     build: ./user-service
     restart: always
     hostname: user-service
     env_file:
-      - .env.development
+      - .env
     networks:
       - backend
-    links:
-      - mailer
-      - db
     ports:
-      - ${USER_SERVICE_PORT}:${USER_SERVICE_PORT}
-  db:
+      - "${USER_SERVICE_PORT}:${USER_SERVICE_PORT}"
+    depends_on:
+      - user-db
+      - mailer
+
+  task-db:
     image: 'mongo:3.7'
     restart: always
-    hostname: db
     environment:
       MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
     volumes:
-      - "./db/init/:/docker-entrypoint-initdb.d/"
+      - "./task-db/data:/data/db"
     networks:
       - backend
-    env_file:
-      - .env.development
-    ports:
-      - 27017:27017
+
+  token-db:
+    image: 'mongo:3.7'
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+    volumes:
+      - "./token-db/data:/data/db"
+    networks:
+      - backend
+
+  user-db:
+    image: 'mongo:3.7'
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+    volumes:
+      - "./user-db/data:/data/db"
+    networks:
+      - backend
+
 networks:
   backend:
     driver: bridge
