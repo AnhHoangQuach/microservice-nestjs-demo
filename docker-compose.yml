@@ -75,32 +75,32 @@ services:
       - mailer
 
   task-db:
-    image: 'mongo:3.7'
+    image: 'mongo:latest'
     restart: always
-    environment:
-      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
     volumes:
       - "./task-db/data:/data/db"
+    ports:
+      - 27017:27017
     networks:
       - backend
 
   token-db:
-    image: 'mongo:3.7'
+    image: 'mongo:latest'
     restart: always
-    environment:
-      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
     volumes:
       - "./token-db/data:/data/db"
+    ports:
+      - 27018:27017
     networks:
       - backend
 
   user-db:
-    image: 'mongo:3.7'
+    image: 'mongo:latest'
     restart: always
-    environment:
-      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
     volumes:
       - "./user-db/data:/data/db"
+    ports:
+      - 27019:27017
     networks:
       - backend
 

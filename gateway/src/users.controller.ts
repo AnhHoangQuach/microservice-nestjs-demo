@@ -1,41 +1,36 @@
 import {
+  Body,
   Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Param,
   Post,
   Put,
-  Get,
-  Body,
   Req,
-  Inject,
-  HttpStatus,
-  HttpException,
-  Param,
 } from '@nestjs/common';
-import { firstValueFrom } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
-import {
-  ApiTags,
-  ApiOkResponse,
-  ApiCreatedResponse,
-  ApiBearerAuth,
-} from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { firstValueFrom } from 'rxjs';
 
 import { Authorization } from './decorators/authorization.decorator';
 import { IAuthorizedRequest } from './interfaces/common/authorized-request.interface';
-import { IServiceUserCreateResponse } from './interfaces/user/service-user-create-response.interface';
-import { IServiceUserSearchResponse } from './interfaces/user/service-user-search-response.interface';
 import { IServiveTokenCreateResponse } from './interfaces/token/service-token-create-response.interface';
 import { IServiceTokenDestroyResponse } from './interfaces/token/service-token-destroy-response.interface';
 import { IServiceUserConfirmResponse } from './interfaces/user/service-user-confirm-response.interface';
+import { IServiceUserCreateResponse } from './interfaces/user/service-user-create-response.interface';
 import { IServiceUserGetByIdResponse } from './interfaces/user/service-user-get-by-id-response.interface';
+import { IServiceUserSearchResponse } from './interfaces/user/service-user-search-response.interface';
 
-import { GetUserByTokenResponseDto } from './interfaces/user/dto/get-user-by-token-response.dto';
-import { CreateUserDto } from './interfaces/user/dto/create-user.dto';
-import { CreateUserResponseDto } from './interfaces/user/dto/create-user-response.dto';
-import { LoginUserDto } from './interfaces/user/dto/login-user.dto';
-import { LoginUserResponseDto } from './interfaces/user/dto/login-user-response.dto';
-import { LogoutUserResponseDto } from './interfaces/user/dto/logout-user-response.dto';
-import { ConfirmUserDto } from './interfaces/user/dto/confirm-user.dto';
 import { ConfirmUserResponseDto } from './interfaces/user/dto/confirm-user-response.dto';
+import { ConfirmUserDto } from './interfaces/user/dto/confirm-user.dto';
+import { CreateUserResponseDto } from './interfaces/user/dto/create-user-response.dto';
+import { CreateUserDto } from './interfaces/user/dto/create-user.dto';
+import { GetUserByTokenResponseDto } from './interfaces/user/dto/get-user-by-token-response.dto';
+import { LoginUserResponseDto } from './interfaces/user/dto/login-user-response.dto';
+import { LoginUserDto } from './interfaces/user/dto/login-user.dto';
+import { LogoutUserResponseDto } from './interfaces/user/dto/logout-user-response.dto';
 
 @Controller('users')
 @ApiTags('users')
@@ -46,7 +41,6 @@ export class UsersController {
   ) {}
 
   @Get()
-  @ApiBearerAuth('JWT')
   @Authorization(true)
   @ApiOkResponse({
     type: GetUserByTokenResponseDto,
@@ -146,7 +140,6 @@ export class UsersController {
   }
 
   @Put('/logout')
-  @ApiBearerAuth('JWT')
   @Authorization(true)
   @ApiCreatedResponse({
     type: LogoutUserResponseDto,
@@ -182,7 +175,6 @@ export class UsersController {
   }
 
   @Get('/confirm/:link')
-  @ApiBearerAuth('JWT')
   @ApiCreatedResponse({
     type: ConfirmUserResponseDto,
   })

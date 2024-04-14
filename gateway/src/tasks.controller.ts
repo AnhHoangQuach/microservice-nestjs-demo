@@ -1,40 +1,35 @@
 import {
-  Controller,
-  Inject,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Param,
   Body,
-  Req,
+  Controller,
+  Delete,
+  Get,
   HttpException,
   HttpStatus,
+  Inject,
+  Param,
+  Post,
+  Put,
+  Req,
 } from '@nestjs/common';
-import { firstValueFrom } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
-import {
-  ApiTags,
-  ApiOkResponse,
-  ApiCreatedResponse,
-  ApiBearerAuth,
-} from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { firstValueFrom } from 'rxjs';
 
 import { Authorization } from './decorators/authorization.decorator';
 import { Permission } from './decorators/permission.decorator';
 
 import { IAuthorizedRequest } from './interfaces/common/authorized-request.interface';
+import { CreateTaskResponseDto } from './interfaces/task/dto/create-task-response.dto';
+import { CreateTaskDto } from './interfaces/task/dto/create-task.dto';
+import { DeleteTaskResponseDto } from './interfaces/task/dto/delete-task-response.dto';
+import { GetTasksResponseDto } from './interfaces/task/dto/get-tasks-response.dto';
+import { TaskIdDto } from './interfaces/task/dto/task-id.dto';
+import { UpdateTaskResponseDto } from './interfaces/task/dto/update-task-response.dto';
+import { UpdateTaskDto } from './interfaces/task/dto/update-task.dto';
 import { IServiceTaskCreateResponse } from './interfaces/task/service-task-create-response.interface';
 import { IServiceTaskDeleteResponse } from './interfaces/task/service-task-delete-response.interface';
 import { IServiceTaskSearchByUserIdResponse } from './interfaces/task/service-task-search-by-user-id-response.interface';
 import { IServiceTaskUpdateByIdResponse } from './interfaces/task/service-task-update-by-id-response.interface';
-import { GetTasksResponseDto } from './interfaces/task/dto/get-tasks-response.dto';
-import { CreateTaskResponseDto } from './interfaces/task/dto/create-task-response.dto';
-import { DeleteTaskResponseDto } from './interfaces/task/dto/delete-task-response.dto';
-import { UpdateTaskResponseDto } from './interfaces/task/dto/update-task-response.dto';
-import { CreateTaskDto } from './interfaces/task/dto/create-task.dto';
-import { UpdateTaskDto } from './interfaces/task/dto/update-task.dto';
-import { TaskIdDto } from './interfaces/task/dto/task-id.dto';
 
 @Controller('tasks')
 @ApiTags('tasks')
@@ -44,7 +39,6 @@ export class TasksController {
   ) {}
 
   @Get()
-  @ApiBearerAuth('JWT')
   @Authorization(true)
   @Permission('task_search_by_user_id')
   @ApiOkResponse({
@@ -71,7 +65,6 @@ export class TasksController {
   }
 
   @Post()
-  @ApiBearerAuth('JWT')
   @Authorization(true)
   @Permission('task_create')
   @ApiCreatedResponse({
@@ -110,7 +103,6 @@ export class TasksController {
   }
 
   @Delete(':id')
-  @ApiBearerAuth('JWT')
   @Authorization(true)
   @Permission('task_delete_by_id')
   @ApiOkResponse({
@@ -148,7 +140,6 @@ export class TasksController {
   }
 
   @Put(':id')
-  @ApiBearerAuth('JWT')
   @Authorization(true)
   @Permission('task_update_by_id')
   @ApiOkResponse({
