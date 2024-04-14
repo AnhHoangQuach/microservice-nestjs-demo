@@ -12,7 +12,8 @@ import { ConfigModule } from '@nestjs/config';
       transport: {
         host: process.env.MAIL_HOST,
         port: +process.env.MAIL_PORT,
-        secure: true, // upgrade later with STARTTLS
+        ignoreTLS: true,
+        secure: false,
         auth: {
           user: process.env.MAIL_AUTH_USER,
           pass: process.env.MAIL_AUTH_PASS,

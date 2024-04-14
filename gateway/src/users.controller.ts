@@ -16,7 +16,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { Authorization } from './decorators/authorization.decorator';
 import { IAuthorizedRequest } from './interfaces/common/authorized-request.interface';
-import { IServiveTokenCreateResponse } from './interfaces/token/service-token-create-response.interface';
+import { IServiceTokenCreateResponse } from './interfaces/token/service-token-create-response.interface';
 import { IServiceTokenDestroyResponse } from './interfaces/token/service-token-destroy-response.interface';
 import { IServiceUserConfirmResponse } from './interfaces/user/service-user-confirm-response.interface';
 import { IServiceUserCreateResponse } from './interfaces/user/service-user-create-response.interface';
@@ -84,7 +84,7 @@ export class UsersController {
       );
     }
 
-    const createTokenResponse: IServiveTokenCreateResponse =
+    const createTokenResponse: IServiceTokenCreateResponse =
       await firstValueFrom(
         this.tokenServiceClient.send('token_create', {
           userId: createUserResponse.user.id,
@@ -123,7 +123,7 @@ export class UsersController {
       );
     }
 
-    const createTokenResponse: IServiveTokenCreateResponse =
+    const createTokenResponse: IServiceTokenCreateResponse =
       await firstValueFrom(
         this.tokenServiceClient.send('token_create', {
           userId: getUserResponse.user.id,

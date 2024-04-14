@@ -52,6 +52,8 @@ export class UserService {
   }
 
   public getConfirmationLink(link: string): string {
-    return link;
+    return `${this.configService.get('BASE_URI')}:${this.configService.get(
+      'API_GATEWAY_PORT',
+    )}/users/confirm/${link}`;
   }
 }
