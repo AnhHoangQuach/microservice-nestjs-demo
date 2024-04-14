@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { ClientProxyFactory } from '@nestjs/microservices';
 
@@ -9,6 +9,8 @@ import { AuthGuard } from './services/guards/authorization.guard';
 import { PermissionGuard } from './services/guards/permission.guard';
 
 import { ConfigService } from './services/config/config.service';
+import { RateLimiterMiddleware } from './middlewares/rate-limiter.middleware';
+import { RedisService } from './services/redis.service';
 
 @Module({
   imports: [],
@@ -55,6 +57,13 @@ import { ConfigService } from './services/config/config.service';
       provide: APP_GUARD,
       useClass: PermissionGuard,
     },
+    RedisService,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(RateLimiterMiddleware)
+      .forRoutes('/login', '/users', '/tasks');
+  }
+}
