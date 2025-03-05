@@ -12,19 +12,6 @@ services:
     networks:
       - backend
 
-  task-service:
-    build: ./task-service
-    restart: always
-    hostname: task-service
-    env_file:
-      - .env
-    ports:
-      - "${TASK_SERVICE_PORT}:${TASK_SERVICE_PORT}"
-    networks:
-      - backend
-    depends_on:
-      - task-db
-
   token-service:
     build: ./token-service
     restart: always
@@ -73,16 +60,6 @@ services:
     depends_on:
       - user-db
       - mailer
-
-  task-db:
-    image: 'mongo:latest'
-    restart: always
-    volumes:
-      - "./task-db/data:/data/db"
-    ports:
-      - 27017:27017
-    networks:
-      - backend
 
   token-db:
     image: 'mongo:latest'
