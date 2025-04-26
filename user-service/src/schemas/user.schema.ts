@@ -1,5 +1,5 @@
-import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcryptjs';
+import * as mongoose from 'mongoose';
 
 const SALT_ROUNDS = 10;
 
@@ -9,6 +9,7 @@ function transformValue(doc, ret: { [key: string]: any }) {
 }
 
 export interface IUserSchema extends mongoose.Document {
+  name: string;
   email: string;
   password: string;
   is_confirmed: boolean;
@@ -25,6 +26,10 @@ export const UserSchema = new mongoose.Schema<IUserSchema>(
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
         'Email should be valid',
       ],
+    },
+    name: {
+      type: String,
+      required: [true, 'Name can not be empty'],
     },
     is_confirmed: {
       type: Boolean,

@@ -20,10 +20,10 @@ export class ConfigService {
       },
       transport: Transport.TCP,
     };
-    this.envConfig.taskService = {
+    this.envConfig.productService = {
       options: {
-        port: process.env.TASK_SERVICE_PORT,
-        host: process.env.TASK_SERVICE_HOST,
+        port: process.env.PRODUCT_SERVICE_PORT,
+        host: process.env.PRODUCT_SERVICE_HOST,
       },
       transport: Transport.TCP,
     };

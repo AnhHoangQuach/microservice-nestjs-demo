@@ -3,7 +3,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { ClientProxyFactory } from '@nestjs/microservices';
 
 import { UsersController } from './users.controller';
-import { TasksController } from './tasks.controller';
+import { ProductsController } from './products.controller';
 
 import { AuthGuard } from './services/guards/authorization.guard';
 
@@ -13,7 +13,7 @@ import { RedisService } from './services/redis.service';
 
 @Module({
   imports: [],
-  controllers: [UsersController, TasksController],
+  controllers: [UsersController, ProductsController],
   providers: [
     ConfigService,
     {
@@ -33,9 +33,9 @@ import { RedisService } from './services/redis.service';
       inject: [ConfigService],
     },
     {
-      provide: 'TASK_SERVICE',
+      provide: 'PRODUCT_SERVICE',
       useFactory: (configService: ConfigService) => {
-        return ClientProxyFactory.create(configService.get('taskService'));
+        return ClientProxyFactory.create(configService.get('productService'));
       },
       inject: [ConfigService],
     },
@@ -48,8 +48,6 @@ import { RedisService } from './services/redis.service';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(RateLimiterMiddleware)
-      .forRoutes('/login', '/users', '/tasks');
+    consumer.apply(RateLimiterMiddleware).forRoutes('/login', '/users');
   }
 }

@@ -1,11 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IProduct } from '../product.interface';
 
-export class LogoutUserResponseDto {
+export class FetchProductsResponseDto {
   @ApiProperty()
   message: string;
 
   @ApiProperty()
-  data: null;
+  products: IProduct[];
 
   @ApiProperty()
   errors: { [key: string]: any };

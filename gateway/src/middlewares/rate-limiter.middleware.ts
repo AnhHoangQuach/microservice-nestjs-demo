@@ -28,9 +28,6 @@ export class RateLimiterMiddleware implements NestMiddleware {
       case '/users':
         weight = 8;
         break;
-      case '/tasks':
-        weight = 6;
-        break;
       default:
         weight = 1;
     }

@@ -1,15 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class LoginUserResponseDto {
-  @ApiProperty({ example: 'token_create_success' })
+  @ApiProperty()
   message: string;
-  @ApiProperty({
-    example: { token: 'someEncodedToken' },
-    nullable: true,
-  })
+
+  @ApiProperty()
   data: {
     token: string;
   };
-  @ApiProperty({ example: null, nullable: true })
+
+  @ApiProperty()
   errors: { [key: string]: any };
 }

@@ -1,10 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ConfirmUserResponseDto {
-  @ApiProperty({ example: 'user_confirm_success' })
+  @ApiProperty()
   message: string;
-  @ApiProperty({ example: null, nullable: true, type: 'null' })
+
+  @ApiProperty()
   data: null;
-  @ApiProperty({ example: null, nullable: true })
+
+  @ApiProperty()
   errors: { [key: string]: any };
 }
