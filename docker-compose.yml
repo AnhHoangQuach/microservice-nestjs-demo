@@ -49,17 +49,6 @@ services:
     networks:
       - backend
 
-  permission-service:
-    build: ./permission-service
-    restart: always
-    hostname: permission-service
-    env_file:
-      - .env
-    ports:
-      - "${PERMISSION_SERVICE_PORT}:${PERMISSION_SERVICE_PORT}"
-    networks:
-      - backend
-
   user-service:
     build: ./user-service
     restart: always

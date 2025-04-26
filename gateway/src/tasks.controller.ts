@@ -12,11 +12,10 @@ import {
   Req,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { firstValueFrom } from 'rxjs';
 
 import { Authorization } from './decorators/authorization.decorator';
-import { Permission } from './decorators/permission.decorator';
 
 import { IAuthorizedRequest } from './interfaces/common/authorized-request.interface';
 import { CreateTaskResponseDto } from './interfaces/task/dto/create-task-response.dto';
@@ -40,11 +39,6 @@ export class TasksController {
 
   @Get()
   @Authorization(true)
-  @Permission('task_search_by_user_id')
-  @ApiOkResponse({
-    type: GetTasksResponseDto,
-    description: 'List of tasks for signed in user',
-  })
   public async getTasks(
     @Req() request: IAuthorizedRequest,
   ): Promise<GetTasksResponseDto> {
@@ -66,10 +60,6 @@ export class TasksController {
 
   @Post()
   @Authorization(true)
-  @Permission('task_create')
-  @ApiCreatedResponse({
-    type: CreateTaskResponseDto,
-  })
   public async createTask(
     @Req() request: IAuthorizedRequest,
     @Body() taskRequest: CreateTaskDto,
@@ -104,10 +94,6 @@ export class TasksController {
 
   @Delete(':id')
   @Authorization(true)
-  @Permission('task_delete_by_id')
-  @ApiOkResponse({
-    type: DeleteTaskResponseDto,
-  })
   public async deleteTask(
     @Req() request: IAuthorizedRequest,
     @Param() params: TaskIdDto,
@@ -141,10 +127,6 @@ export class TasksController {
 
   @Put(':id')
   @Authorization(true)
-  @Permission('task_update_by_id')
-  @ApiOkResponse({
-    type: UpdateTaskResponseDto,
-  })
   public async updateTask(
     @Req() request: IAuthorizedRequest,
     @Param() params: TaskIdDto,

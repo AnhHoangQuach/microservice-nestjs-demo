@@ -7,11 +7,10 @@ import {
   Inject,
   Param,
   Post,
-  Put,
   Req,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { firstValueFrom } from 'rxjs';
 
 import { Authorization } from './decorators/authorization.decorator';
@@ -42,9 +41,6 @@ export class UsersController {
 
   @Get()
   @Authorization(true)
-  @ApiOkResponse({
-    type: GetUserByTokenResponseDto,
-  })
   public async getUserByToken(
     @Req() request: IAuthorizedRequest,
   ): Promise<GetUserByTokenResponseDto> {
@@ -64,9 +60,6 @@ export class UsersController {
   }
 
   @Post()
-  @ApiCreatedResponse({
-    type: CreateUserResponseDto,
-  })
   public async createUser(
     @Body() userRequest: CreateUserDto,
   ): Promise<CreateUserResponseDto> {
@@ -102,9 +95,6 @@ export class UsersController {
   }
 
   @Post('/login')
-  @ApiCreatedResponse({
-    type: LoginUserResponseDto,
-  })
   public async loginUser(
     @Body() loginRequest: LoginUserDto,
   ): Promise<LoginUserResponseDto> {
@@ -139,11 +129,8 @@ export class UsersController {
     };
   }
 
-  @Put('/logout')
+  @Post('/logout')
   @Authorization(true)
-  @ApiCreatedResponse({
-    type: LogoutUserResponseDto,
-  })
   public async logoutUser(
     @Req() request: IAuthorizedRequest,
   ): Promise<LogoutUserResponseDto> {
@@ -175,9 +162,6 @@ export class UsersController {
   }
 
   @Get('/confirm/:link')
-  @ApiCreatedResponse({
-    type: ConfirmUserResponseDto,
-  })
   public async confirmUser(
     @Param() params: ConfirmUserDto,
   ): Promise<ConfirmUserResponseDto> {
