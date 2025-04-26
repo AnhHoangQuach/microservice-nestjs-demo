@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 import { MongooseModule } from '@nestjs/mongoose';
+import { MongoConfigService } from './configs/mongo-config.service';
+import { UserLinkSchema } from './schemas/user-link.schema';
+import { UserSchema } from './schemas/user.schema';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { MongoConfigService } from './configs/mongo-config.service';
-import { UserSchema } from './schemas/user.schema';
-import { UserLinkSchema } from './schemas/user-link.schema';
-import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [

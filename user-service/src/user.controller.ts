@@ -1,4 +1,4 @@
-import { Controller, HttpStatus, Inject } from '@nestjs/common';
+import { Controller, HttpStatus, Inject, Logger } from '@nestjs/common';
 import { MessagePattern, ClientProxy } from '@nestjs/microservices';
 
 import { UserService } from './user.service';
@@ -9,6 +9,7 @@ import { IUserConfirmResponse } from './interfaces/user-confirm-response.interfa
 
 @Controller('user')
 export class UserController {
+  private readonly logger = new Logger(UserController.name);
   constructor(
     private readonly userService: UserService,
     @Inject('MAILER_SERVICE') private readonly mailerServiceClient: ClientProxy,
@@ -157,23 +158,35 @@ export class UserController {
             createdUser.id,
           );
           delete createdUser.password;
-          result = {
+          if (!this.mailerServiceClient) {
+            throw new Error('Mailer service client is not initialized');
+          }
+
+          const emailResult = await this.mailerServiceClient
+            .send('mail_send', {
+              to: createdUser.email,
+              subject: 'Email confirmation',
+              html: `<center>
+                <b>Hi there, please confirm your email to use Smoothday.</b><br>
+                Use the following link for this.<br>
+                <a href="${this.userService.getConfirmationLink(userLink.link)}">
+                  <b>Confirm The Email</b>
+                </a>
+              </center>`,
+            })
+            .toPromise();
+
+          this.logger.log(
+            `Email sent successfully to ${createdUser.email}`,
+            emailResult,
+          );
+
+          return {
             status: HttpStatus.CREATED,
             message: 'user_create_success',
             user: createdUser,
             errors: null,
           };
-          this.mailerServiceClient.send('mail_send', {
-            to: createdUser.email,
-            subject: 'Email confirmation',
-            html: `<center>
-              <b>Hi there, please confirm your email to use Smoothday.</b><br>
-              Use the following link for this.<br>
-              <a href="${this.userService.getConfirmationLink(
-                userLink.link,
-              )}"><b>Confirm The Email</b></a>
-              </center>`,
-          });
         } catch (e) {
           result = {
             status: HttpStatus.PRECONDITION_FAILED,

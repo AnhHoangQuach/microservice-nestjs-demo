@@ -1,6 +1,6 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import { Controller, HttpStatus } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { MailerService } from '@nestjs-modules/mailer';
 import { IEmailData } from './interfaces/email-data.interface';
 import { IMailSendResponse } from './interfaces/mail-send-response.interface';
 
