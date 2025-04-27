@@ -6,7 +6,7 @@ import {
 export class MongoConfigService implements MongooseOptionsFactory {
   createMongooseOptions(): MongooseModuleOptions {
     return {
-      uri: process.env.MONGO_PRODUCT_DB,
+      uri: process.env.MONGO_ORDER_DB,
     };
   }
 }

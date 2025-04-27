@@ -37,6 +37,7 @@ services:
       - backend
     depends_on:
       - order-db
+      - product-service
 
   token-service:
     build: ./token-service

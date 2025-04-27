@@ -6,6 +6,7 @@ import { MongoConfigService } from './configs/mongo-config.service';
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { OrderSchema } from './schemas/order.schema';
+import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -23,6 +24,20 @@ import { OrderSchema } from './schemas/order.schema';
     ]),
   ],
   controllers: [OrderController],
-  providers: [OrderService],
+  providers: [
+    OrderService,
+    {
+      provide: 'PRODUCT_SERVICE',
+      useFactory: () => {
+        return ClientProxyFactory.create({
+          transport: Transport.TCP,
+          options: {
+            host: process.env.PRODUCT_SERVICE_HOST,
+            port: parseInt(process.env.PRODUCT_SERVICE_PORT),
+          },
+        });
+      },
+    },
+  ],
 })
 export class OrderModule {}
