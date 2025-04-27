@@ -25,6 +25,19 @@ services:
     depends_on:
       - product-db
 
+  order-service:
+    build: ./order-service
+    restart: always
+    hostname: order-service
+    env_file:
+      - .env
+    ports:
+      - "${ORDER_SERVICE_PORT}:${ORDER_SERVICE_PORT}"
+    networks:
+      - backend
+    depends_on:
+      - order-db
+
   token-service:
     build: ./token-service
     restart: always
@@ -80,6 +93,16 @@ services:
       - "./token-db/data:/data/db"
     ports:
       - 27018:27017
+    networks:
+      - backend
+
+  order-db:
+    image: 'mongo:latest'
+    restart: always
+    volumes:
+      - "./order-db/data:/data/db"
+    ports:
+      - 27020:27017
     networks:
       - backend
 
