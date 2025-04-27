@@ -39,7 +39,7 @@ export class OrdersController {
   ): Promise<FetchOrdersResponseDto> {
     const userInfo = request.user;
     const ordersResponse: IServiceOrderFetchResponse = await firstValueFrom(
-      this.orderServiceClient.send('fetch_orders', { user_id: userInfo.id }),
+      this.orderServiceClient.send('fetch_orders', userInfo.id),
     );
 
     return {

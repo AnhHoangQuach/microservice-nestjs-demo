@@ -1,12 +1,12 @@
 import { Controller, HttpStatus, Inject } from '@nestjs/common';
 import { ClientProxy, MessagePattern } from '@nestjs/microservices';
 
+import { firstValueFrom } from 'rxjs';
 import { IOrderCreateResponse } from './interfaces/order-create-response.interface';
+import { IOrderCreate } from './interfaces/order-create.interface';
 import { IOrderFetchResponse } from './interfaces/order-fetch-response.interface';
 import { IOrderSearchResponse } from './interfaces/order-search-response.interface';
 import { OrderService } from './order.service';
-import { firstValueFrom } from 'rxjs';
-import { IOrderCreate } from './interfaces/order-create.interface';
 
 @Controller()
 export class OrderController {
@@ -17,8 +17,8 @@ export class OrderController {
   ) {}
 
   @MessagePattern('fetch_orders')
-  public async fetchOrders(user_id: string): Promise<IOrderFetchResponse> {
-    const orders = await this.orderService.fetchOrders(user_id);
+  public async fetchOrders(id: string): Promise<IOrderFetchResponse> {
+    const orders = await this.orderService.fetchOrders(id);
     return {
       status: HttpStatus.OK,
       message: 'fetch_orders_success',
@@ -32,26 +32,25 @@ export class OrderController {
 
     if (id) {
       const order = await this.orderService.findOrderById(id);
+      const newProducts = [];
 
-      for (let i = 0; i < order.products.length; i++) {
-        const productInfo = await firstValueFrom(
-          this.productServiceClient.send(
-            'product_get_by_id',
-            order.products[i].product_id,
-          ),
-        );
+      if (order.products) {
+        for (let i = 0; i < order.products.length; i++) {
+          const productInfo = await firstValueFrom(
+            this.productServiceClient.send(
+              'product_get_by_id',
+              order.products[i].id,
+            ),
+          );
 
-        // Merge product info with order product
-        order.products[i] = {
-          ...order.products[i],
-          productInfo: productInfo.product,
-        };
+          newProducts.push(productInfo.product);
+        }
       }
 
       result = {
         status: HttpStatus.OK,
         message: 'order_get_by_id_success',
-        order,
+        order: { ...order.toJSON(), products: newProducts },
       };
     } else {
       result = {

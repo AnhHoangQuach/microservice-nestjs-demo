@@ -1,5 +1,5 @@
 export interface IOrderProductCreate {
-  product_id: string;
+  id: string;
   quantity: number;
 }
 
